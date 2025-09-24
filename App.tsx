@@ -7,6 +7,7 @@ import Orders from './pages/Orders';
 import Settlements from './pages/Settlements';
 import { useAppData } from './hooks/useAppData';
 import type { Page } from './types';
+import { ThemeProvider } from './contexts/ThemeContext';
 
 const App: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<Page>('dashboard');
@@ -28,9 +29,11 @@ const App: React.FC = () => {
   };
 
   return (
-    <Layout currentPage={currentPage} setCurrentPage={setCurrentPage}>
-      {renderPage()}
-    </Layout>
+    <ThemeProvider>
+      <Layout currentPage={currentPage} setCurrentPage={setCurrentPage}>
+        {renderPage()}
+      </Layout>
+    </ThemeProvider>
   );
 };
 

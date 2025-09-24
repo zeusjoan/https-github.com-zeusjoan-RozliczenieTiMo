@@ -234,7 +234,7 @@ const MonthlyDocumentsManager: React.FC<{
                         </Button>
                     </>
                 ) : (
-                    <p className="text-sm text-muted-foreground">Wgraj oba pliki, aby je połączyć.</p>
+                    <p className="text-sm text-muted-foreground dark:text-gray-400">Wgraj oba pliki, aby je połączyć.</p>
                 )}
                 {(pozFileContent || invoiceFileContent) && (
                      <Button variant="destructive" onClick={handleReset} disabled={isMerging}>

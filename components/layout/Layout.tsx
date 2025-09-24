@@ -20,16 +20,16 @@ const Layout: React.FC<LayoutProps> = ({ children, currentPage, setCurrentPage }
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="flex h-screen bg-secondary text-secondary-foreground">
+    <div className="flex h-screen">
       <Sidebar currentPage={currentPage} setCurrentPage={setCurrentPage} isOpen={sidebarOpen} setIsOpen={setSidebarOpen} />
       <div className="flex-1 flex flex-col overflow-hidden">
-        <header className="md:hidden bg-white dark:bg-primary border-b border-gray-200 dark:border-gray-800 p-4 flex items-center">
-            <button onClick={() => setSidebarOpen(true)} className="text-gray-500 focus:outline-none">
+        <header className="md:hidden bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 p-4 flex items-center">
+            <button onClick={() => setSidebarOpen(true)} className="text-gray-500 dark:text-gray-400 focus:outline-none">
                 <MenuIcon className="h-6 w-6"/>
             </button>
             <h1 className="text-xl font-semibold ml-4 capitalize">{currentPage}</h1>
         </header>
-        <main className="flex-1 overflow-x-hidden overflow-y-auto bg-secondary p-4 sm:p-6 lg:p-8">
+        <main className="flex-1 overflow-x-hidden overflow-y-auto bg-secondary dark:bg-black p-4 sm:p-6 lg:p-8">
           {children}
         </main>
       </div>

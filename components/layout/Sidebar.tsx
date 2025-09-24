@@ -5,6 +5,7 @@ import DashboardIcon from '../icons/DashboardIcon';
 import ClientsIcon from '../icons/ClientsIcon';
 import OrdersIcon from '../icons/OrdersIcon';
 import SettlementsIcon from '../icons/SettlementsIcon';
+import ThemeToggle from '../ThemeToggle';
 
 interface SidebarProps {
   currentPage: Page;
@@ -52,12 +53,14 @@ const Sidebar: React.FC<SidebarProps> = ({ currentPage, setCurrentPage, isOpen, 
       <aside
         className={`fixed inset-y-0 left-0 z-30 w-64 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 transform ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
-        } md:relative md:translate-x-0 transition-transform duration-300 ease-in-out`}
+        } md:relative md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col`}
       >
-        <div className="flex items-center justify-center p-6 border-b border-gray-200 dark:border-gray-800">
-          <h1 className="text-2xl font-bold text-primary dark:text-white">Time<span className="text-blue-500">Sheet</span></h1>
+        <div className="flex-shrink-0">
+          <div className="flex items-center justify-center p-6 border-b border-gray-200 dark:border-gray-800">
+            <h1 className="text-2xl font-bold text-primary dark:text-white">Time<span className="text-blue-500">Sheet</span></h1>
+          </div>
         </div>
-        <nav className="p-4 space-y-2">
+        <nav className="flex-grow p-4 space-y-2">
           {navItems.map((item) => (
             <NavItem
               key={item.page}
@@ -69,6 +72,9 @@ const Sidebar: React.FC<SidebarProps> = ({ currentPage, setCurrentPage, isOpen, 
             />
           ))}
         </nav>
+        <div className="p-4 border-t border-gray-200 dark:border-gray-800">
+          <ThemeToggle />
+        </div>
       </aside>
     </>
   );

@@ -1,10 +1,12 @@
-import React, { useState, useMemo } from 'react';
+
+import React, { useState, useMemo, useEffect } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 import Card, { CardHeader, CardTitle, CardContent, CardDescription } from '../components/ui/Card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../components/ui/Table';
 import Select from '../components/ui/Select';
 import type { Order, Settlement, Client } from '../types';
 import { OrderItemType } from '../types';
+import { useTheme } from '../contexts/ThemeContext';
 
 interface DashboardProps {
   orders: Order[];
@@ -28,6 +30,22 @@ const MONTHS = [
 const Dashboard: React.FC<DashboardProps> = ({ orders, settlements, clients }) => {
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [selectedMonth, setSelectedMonth] = useState(0); // 1-12 for months, 0 for "All Year"
+  const { theme } = useTheme();
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  useEffect(() => {
+    const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const updateDarkMode = () => {
+      if (theme === 'system') {
+        setIsDarkMode(darkModeMediaQuery.matches);
+      } else {
+        setIsDarkMode(theme === 'dark');
+      }
+    };
+    updateDarkMode();
+    darkModeMediaQuery.addEventListener('change', updateDarkMode);
+    return () => darkModeMediaQuery.removeEventListener('change', updateDarkMode);
+  }, [theme]);
 
   const availableYears = useMemo(() => {
     const years = new Set(settlements.map(s => s.year));
@@ -140,8 +158,16 @@ const Dashboard: React.FC<DashboardProps> = ({ orders, settlements, clients }) =
                             <Pie data={dashboardData.pieChartData} innerRadius={30} outerRadius={50} fill="#8884d8" paddingAngle={5} dataKey="value" nameKey="name">
                                 {dashboardData.pieChartData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[entry.name]} />)}
                             </Pie>
-                            <Tooltip formatter={(value: number) => `${value.toFixed(2)} godz.`} />
-                            <Legend layout="vertical" align="right" verticalAlign="middle" />
+                            <Tooltip
+                                contentStyle={isDarkMode ? { backgroundColor: 'rgb(31 41 55)', border: '1px solid rgb(55 65 81)', borderRadius: '0.5rem' } : {}}
+                                labelStyle={isDarkMode ? { color: '#f9fafb' } : {}}
+                                itemStyle={isDarkMode ? { color: '#f9fafb' } : {}}
+                                formatter={(value: number, name: OrderItemType) => [`${(value as number).toFixed(2)} godz.`, name]}
+                             />
+                            <Legend
+                                layout="vertical" align="right" verticalAlign="middle"
+                                wrapperStyle={isDarkMode ? { color: '#d1d5db' } : {}}
+                            />
                         </PieChart>
                     </ResponsiveContainer>
                   </div>
@@ -185,7 +211,7 @@ const Dashboard: React.FC<DashboardProps> = ({ orders, settlements, clients }) =
                                     <div className="w-full bg-gray-200 rounded-full h-5 dark:bg-gray-700 relative">
                                         <div className="bg-blue-600 h-5 rounded-full" style={{ width: `${item.progress}%` }}></div>
                                         <div className="absolute inset-0 flex items-center justify-center">
-                                            <span className={`text-xs font-bold ${item.progress > 40 ? 'text-white' : 'text-primary'}`}>{item.progress.toFixed(0)}%</span>
+                                            <span className={`text-xs font-bold ${item.progress > 40 ? 'text-white' : 'text-primary dark:text-gray-200'}`}>{item.progress.toFixed(0)}%</span>
                                         </div>
                                     </div>
                                     <div className="text-xs text-muted-foreground text-center mt-1">Pozostało: {item.remainingHours.toFixed(2)} h</div>
