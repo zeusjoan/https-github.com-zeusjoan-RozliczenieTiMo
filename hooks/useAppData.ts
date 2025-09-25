@@ -248,6 +248,20 @@ export function useAppData() {
     });
   };
 
+  const replaceData = (newData: AppData): boolean => {
+    if (
+      newData &&
+      Array.isArray(newData.clients) &&
+      Array.isArray(newData.orders) &&
+      Array.isArray(newData.settlements) &&
+      Array.isArray(newData.monthlyDocuments)
+    ) {
+      setData(newData);
+      return true;
+    }
+    return false;
+  };
+
   return {
     clients: data.clients,
     orders: data.orders,
@@ -263,6 +277,7 @@ export function useAppData() {
     updateSettlement,
     deleteSettlement,
     addOrUpdateMonthlyDocument,
+    replaceData,
     isInitialized,
   };
 }

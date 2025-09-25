@@ -52,7 +52,9 @@ const Dashboard: React.FC<DashboardProps> = ({ orders, settlements, clients }) =
     if (!years.has(new Date().getFullYear())) {
         years.add(new Date().getFullYear());
     }
-    return Array.from(years).sort((a, b) => b - a);
+    // FIX: Using spread syntax to create an array from the Set. This is a common pattern and
+    // helps TypeScript correctly infer the array type as number[], resolving the sort error.
+    return [...years].sort((a, b) => b - a);
   }, [settlements]);
 
   const dashboardData = useMemo(() => {
@@ -63,7 +65,9 @@ const Dashboard: React.FC<DashboardProps> = ({ orders, settlements, clients }) =
     const totalHoursWorkedInPeriod = filteredSettlementItems.reduce((sum, item) => sum + item.hours, 0);
     const settledOrdersInPeriodIds = new Set(filteredSettlementItems.map(item => item.orderId));
     
-    const workTypeDistributionInPeriod = filteredSettlementItems.reduce((acc, item) => {
+    // FIX: Add explicit type for accumulator 'acc' to ensure workTypeDistributionInPeriod is correctly typed.
+    // This resolves a downstream type inference issue for `value`.
+    const workTypeDistributionInPeriod = filteredSettlementItems.reduce((acc: Record<OrderItemType, number>, item) => {
       acc[item.itemType] = (acc[item.itemType] || 0) + item.hours;
       return acc;
     }, {} as Record<OrderItemType, number>);

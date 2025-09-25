@@ -30,7 +30,7 @@ const App: React.FC = () => {
 
   return (
     <ThemeProvider>
-      <Layout currentPage={currentPage} setCurrentPage={setCurrentPage}>
+      <Layout currentPage={currentPage} setCurrentPage={setCurrentPage} appData={appData}>
         {renderPage()}
       </Layout>
     </ThemeProvider>
